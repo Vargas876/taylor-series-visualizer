@@ -94,15 +94,15 @@ const TaylorSeriesVisualizer = () => {
   }, [selectedFunction, terms, centerPoint]);
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow">
-      <h2 className="text-xl font-bold mb-4">Visualizador de Series de Taylor</h2>
+    <div className="card p-4 shadow">
+      <h2 className="h4 mb-4">Visualizador de Series de Taylor</h2>
       
-      <div className="mb-4">
-        <label className="block mb-2 font-medium">Función:</label>
+      <div className="mb-3">
+        <label className="form-label">Función:</label>
         <select 
           value={selectedFunction}
           onChange={(e) => setSelectedFunction(e.target.value)}
-          className="border rounded p-2 w-full"
+          className="form-select"
         >
           <option value="sin">Seno (sin x)</option>
           <option value="cos">Coseno (cos x)</option>
@@ -111,8 +111,8 @@ const TaylorSeriesVisualizer = () => {
         </select>
       </div>
       
-      <div className="mb-4">
-        <label className="block mb-2 font-medium">
+      <div className="mb-3">
+        <label className="form-label">
           Número de términos: {terms}
         </label>
         <input
@@ -121,12 +121,12 @@ const TaylorSeriesVisualizer = () => {
           max="10"
           value={terms}
           onChange={(e) => setTerms(parseInt(e.target.value))}
-          className="w-full"
+          className="form-range"
         />
       </div>
       
-      <div className="mb-4">
-        <label className="block mb-2 font-medium">
+      <div className="mb-3">
+        <label className="form-label">
           Punto central (a): {centerPoint}
         </label>
         <input
@@ -136,11 +136,11 @@ const TaylorSeriesVisualizer = () => {
           step="0.5"
           value={centerPoint}
           onChange={(e) => setCenterPoint(parseFloat(e.target.value))}
-          className="w-full"
+          className="form-range"
         />
       </div>
       
-      <div className="h-64 w-full">
+      <div style={{ height: '16rem' }}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
             data={data}
@@ -171,9 +171,9 @@ const TaylorSeriesVisualizer = () => {
         </ResponsiveContainer>
       </div>
       
-      <div className="mt-4 p-4 bg-gray-100 rounded">
-        <h3 className="font-bold mb-2">Fórmula de la serie de Taylor:</h3>
-        <p className="text-sm">
+      <div className="mt-4 p-3 bg-light rounded">
+        <h3 className="h5 mb-2">Fórmula de la serie de Taylor:</h3>
+        <p className="small">
           {selectedFunction === 'sin' && (
             <>sin(x) ≈ {
               Array.from({length: terms + 1}, (_, n) => (

@@ -5,12 +5,14 @@ import TaylorSeriesVisualizer from './TaylorSeriesVisualizer';
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Visualizador de Series de Taylor</h1>
-      </header>
-      <main>
-        <TaylorSeriesVisualizer />
-      </main>
+      <div className="container py-4">
+        <h1 className="text-center mb-4">Visualizador de Series de Taylor</h1>
+        <div className="row justify-content-center">
+          <div className="col-md-10">
+            <TaylorSeriesVisualizer />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
