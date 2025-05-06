@@ -1,0 +1,74 @@
+/* Estilos para la fórmula matemática */
+.formula-container {
+    margin-top: 1.5rem;
+    padding: 1.25rem;
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+    overflow-x: auto;
+  }
+  
+  .math-formula {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1.25rem;
+    line-height: 2.5;
+    white-space: nowrap;
+    padding: 10px 0;
+  }
+  
+  .function-name {
+    font-style: italic;
+    margin-right: 5px;
+  }
+  
+  .term {
+    margin: 0 2px;
+  }
+  
+  .coefficient {
+    margin-right: 2px;
+  }
+  
+  .fraction {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    margin: 0 2px;
+  }
+  
+  .numerator {
+    display: block;
+    padding: 0 3px;
+  }
+  
+  .fraction-line {
+    display: block;
+    border-top: 1px solid black;
+    margin: 1px 0;
+  }
+  
+  .denominator {
+    display: block;
+    padding: 0 3px;
+  }
+  
+  /* Mejoras estéticas generales */
+  .card {
+    border-radius: 0.75rem;
+    overflow: hidden;
+  }
+  
+  .form-range::-webkit-slider-thumb {
+    background: #007bff;
+  }
+  
+  .form-range::-moz-range-thumb {
+    background: #007bff;
+  }
+  
+  @media (max-width: 768px) {
+    .math-formula {
+      font-size: 1rem;
+      overflow-x: auto;
+    }
+  }

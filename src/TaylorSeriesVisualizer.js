@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import './TaylorSeriesVisualizer.css'; // Asegúrate de crear este archivo
 
 const TaylorSeriesVisualizer = () => {
   const [selectedFunction, setSelectedFunction] = useState('sin');
@@ -93,6 +94,100 @@ const TaylorSeriesVisualizer = () => {
     setData(generateData());
   }, [selectedFunction, terms, centerPoint]);
 
+  // Genera términos de la fórmula con mejor formato
+  const renderTaylorFormula = () => {
+    let formulaElements = [];
+    
+    switch (selectedFunction) {
+      case 'sin':
+        formulaElements.push(<span key="function-name" className="function-name">sin(x) ≈ </span>);
+        for (let n = 0; n <= terms; n++) {
+          const sign = n > 0 ? (Math.pow(-1, n) < 0 ? ' - ' : ' + ') : '';
+          const coef = Math.abs(Math.pow(-1, n)) === 1 ? '' : Math.abs(Math.pow(-1, n));
+          const xTerm = centerPoint !== 0 ? `(x - ${centerPoint})` : 'x';
+          
+          formulaElements.push(
+            <span key={`term-${n}`} className="term">
+              {sign}
+              {coef && <span className="coefficient">{coef}</span>}
+              <span className="fraction">
+                <span className="numerator">{xTerm}<sup>{2*n+1}</sup></span>
+                <span className="fraction-line"></span>
+                <span className="denominator">{factorial(2*n+1)}</span>
+              </span>
+            </span>
+          );
+        }
+        break;
+      
+      case 'cos':
+        formulaElements.push(<span key="function-name" className="function-name">cos(x) ≈ </span>);
+        for (let n = 0; n <= terms; n++) {
+          const sign = n > 0 ? (Math.pow(-1, n) < 0 ? ' - ' : ' + ') : '';
+          const coef = Math.abs(Math.pow(-1, n)) === 1 ? '' : Math.abs(Math.pow(-1, n));
+          const xTerm = centerPoint !== 0 ? `(x - ${centerPoint})` : 'x';
+          
+          formulaElements.push(
+            <span key={`term-${n}`} className="term">
+              {sign}
+              {coef && <span className="coefficient">{coef}</span>}
+              <span className="fraction">
+                <span className="numerator">{xTerm}<sup>{2*n}</sup></span>
+                <span className="fraction-line"></span>
+                <span className="denominator">{factorial(2*n)}</span>
+              </span>
+            </span>
+          );
+        }
+        break;
+      
+      case 'exp':
+        formulaElements.push(<span key="function-name" className="function-name">e<sup>x</sup> ≈ </span>);
+        for (let n = 0; n <= terms; n++) {
+          const sign = n > 0 ? ' + ' : '';
+          const xTerm = centerPoint !== 0 ? `(x - ${centerPoint})` : 'x';
+          
+          formulaElements.push(
+            <span key={`term-${n}`} className="term">
+              {sign}
+              <span className="fraction">
+                <span className="numerator">{xTerm}<sup>{n}</sup></span>
+                <span className="fraction-line"></span>
+                <span className="denominator">{factorial(n)}</span>
+              </span>
+            </span>
+          );
+        }
+        break;
+      
+      case 'ln':
+        formulaElements.push(<span key="function-name" className="function-name">ln(1+x) ≈ </span>);
+        for (let n = 1; n <= terms; n++) {
+          const sign = n > 1 ? (Math.pow(-1, n+1) < 0 ? ' - ' : ' + ') : '';
+          const coef = Math.abs(Math.pow(-1, n+1)) === 1 ? '' : Math.abs(Math.pow(-1, n+1));
+          const xTerm = centerPoint !== 0 ? `(x - ${centerPoint})` : 'x';
+          
+          formulaElements.push(
+            <span key={`term-${n}`} className="term">
+              {sign}
+              {coef && <span className="coefficient">{coef}</span>}
+              <span className="fraction">
+                <span className="numerator">{xTerm}<sup>{n}</sup></span>
+                <span className="fraction-line"></span>
+                <span className="denominator">{n}</span>
+              </span>
+            </span>
+          );
+        }
+        break;
+      
+      default:
+        formulaElements = [];
+    }
+    
+    return formulaElements;
+  };
+
   return (
     <div className="card p-4 shadow">
       <h2 className="h4 mb-4">Visualizador de Series de Taylor</h2>
@@ -171,39 +266,11 @@ const TaylorSeriesVisualizer = () => {
         </ResponsiveContainer>
       </div>
       
-      <div className="mt-4 p-3 bg-light rounded">
-        <h3 className="h5 mb-2">Fórmula de la serie de Taylor:</h3>
-        <p className="small">
-          {selectedFunction === 'sin' && (
-            <>sin(x) ≈ {
-              Array.from({length: terms + 1}, (_, n) => (
-                `${n > 0 ? (Math.pow(-1, n) < 0 ? ' - ' : ' + ') : ''}${Math.abs(Math.pow(-1, n))===1 ? '' : Math.abs(Math.pow(-1, n))}(x${centerPoint !== 0 ? ` - ${centerPoint}` : ''})^${2*n+1}/${factorial(2*n+1)}`
-              )).join('')
-            }</>
-          )}
-          {selectedFunction === 'cos' && (
-            <>cos(x) ≈ {
-              Array.from({length: terms + 1}, (_, n) => (
-                `${n > 0 ? (Math.pow(-1, n) < 0 ? ' - ' : ' + ') : ''}${Math.abs(Math.pow(-1, n))===1 ? '' : Math.abs(Math.pow(-1, n))}(x${centerPoint !== 0 ? ` - ${centerPoint}` : ''})^${2*n}/${factorial(2*n)}`
-              )).join('')
-            }</>
-          )}
-          {selectedFunction === 'exp' && (
-            <>e^x ≈ {
-              Array.from({length: terms + 1}, (_, n) => (
-                `${n > 0 ? ' + ' : ''}(x${centerPoint !== 0 ? ` - ${centerPoint}` : ''})^${n}/${factorial(n)}`
-              )).join('')
-            }</>
-          )}
-          {selectedFunction === 'ln' && (
-            <>ln(1+x) ≈ {
-              Array.from({length: terms + 1}, (_, n) => {
-                if (n === 0) return '';
-                return `${n > 1 ? (Math.pow(-1, n+1) < 0 ? ' - ' : ' + ') : ''}${Math.abs(Math.pow(-1, n+1))===1 ? '' : Math.abs(Math.pow(-1, n+1))}(x${centerPoint !== 0 ? ` - ${centerPoint}` : ''})^${n}/${n}`
-              }).join('')
-            }</>
-          )}
-        </p>
+      <div className="formula-container mt-4 p-4 bg-light rounded">
+        <h3 className="h5 mb-3 text-center">Fórmula de la serie de Taylor:</h3>
+        <div className="math-formula text-center">
+          {renderTaylorFormula()}
+        </div>
       </div>
     </div>
   );
